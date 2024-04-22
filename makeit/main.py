@@ -1,5 +1,5 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Footer, Label, ListItem, ListView
+from textual.widgets import Label, ListItem, ListView
 from nuclear.sublog import error_handler
 
 from makeit.make import read_make_steps, run_make_step, MakeStep
@@ -11,7 +11,6 @@ class ListViewExample(App):
         self.steps: list[MakeStep] = steps
         self.selected_step: MakeStep | None = None
         self.chosen_step: MakeStep | None = None
-        self.styles.height = 10
 
     def compose(self) -> ComposeResult:
         list_children: list[ListItem] = [ListItem(Label(step.name)) for step in self.steps]
@@ -21,18 +20,21 @@ class ListViewExample(App):
         )
         listview.styles.height = max(len(self.steps), 3) + 1
 
-        summary = Label("Summary", id="summary")
+        summary_header = Label("", id="summary-header")
+        summary = Label("", id="summary")
 
         yield listview
+        yield summary_header
         yield summary
-        yield Footer()
 
     def on_list_view_highlighted(self, event: ListView.Highlighted):
         self.selected_step = self._get_selected_step()
-        if self.selected_step:
-            summary = '\n'.join(self.selected_step.raw_lines)
+        if self.selected_step and self.selected_step.raw_lines:
+            summary_header = self.selected_step.raw_lines[0]
+            summary = '\n'.join(self.selected_step.raw_lines[1:])
             summary = summary.replace('\t', '    ')
             self.query_one("#summary", Label).update(summary)
+            self.query_one("#summary-header", Label).update(summary_header)
 
     def on_list_view_selected(self, event: ListView.Selected):
         self.chosen_step = self._get_selected_step()
