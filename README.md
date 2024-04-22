@@ -1,6 +1,6 @@
-# makeit
+# Makeit
 
-**makeit** is an interactive Makefile step picker.
+**makeit** is an interactive Makefile runner.
 
 <div align="center">
     <a href="https://github.com/igrek51/makeit">GitHub</a>
@@ -24,4 +24,4 @@ Run it in the directory of your Makefile:
 makeit
 ```
 
-It will show a list of available Makefile steps. Find one and hit Enter to run it with `make`.
+It will show a list of available Makefile steps. Pick one and hit Enter to run it with `make`.
