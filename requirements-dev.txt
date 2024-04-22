@@ -1,0 +1,10 @@
+setuptools>=68.1.2
+setuptools_scm
+build>=1.0.3
+wheel
+twine
+pytest
+mock
+coverage
+coveralls
+mypy
