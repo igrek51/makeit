@@ -24,3 +24,6 @@ build:
 # use token from .pypirc
 release: clean build
 	python3 -m twine upload -u __token__ dist/*
+
+testit:
+	sleep 5
