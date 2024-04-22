@@ -1,5 +1,5 @@
 [project]
-name = "makeit"
+name = "makit"
 version = "0.1.0"  # also in makeit/version.py
 description = "Interactive Makefile step picker"
 license = {text = "MIT"}
@@ -33,3 +33,4 @@ include-package-data = true
 
 [project.scripts]
 makeit = "makeit.main:main"
+makit = "makeit.main:main"
