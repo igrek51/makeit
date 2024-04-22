@@ -1,6 +1,7 @@
 from textual.app import App, ComposeResult
 from textual.widgets import Label, ListItem, ListView
 from textual.containers import Horizontal
+from textual import events
 
 from makeit.make import MakeStep
 
@@ -11,6 +12,7 @@ class ListViewExample(App):
         self.steps: list[MakeStep] = steps
         self.selected_step: MakeStep | None = None
         self.chosen_step: MakeStep | None = None
+        self.post_logs: list[str] = []
 
     def compose(self) -> ComposeResult:
         list_children: list[ListItem] = [ListItem(Label(step.name)) for step in self.steps]
@@ -60,3 +62,14 @@ class ListViewExample(App):
         if selected_index < 0 or selected_index >= len(self.steps):
             return None
         return self.steps[selected_index]
+
+    def on_key(self, event: events.Key) -> None:
+        # self.post_logs.append(str(event))
+        if event.key in {'q', 'escape'}:
+            self.exit()
+        elif event.key == 'home':
+            listview: ListView = self.query_one("#steps-list", ListView)
+            listview.index = 0
+        elif event.key == 'end':
+            listview: ListView = self.query_one("#steps-list", ListView)
+            listview.index = len(self.steps) - 1
