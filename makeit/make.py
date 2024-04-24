@@ -23,12 +23,14 @@ def read_make_steps() -> list[MakeStep]:
 
 
 def _parse_makefile_lines(lines: list[str]) -> list[MakeStep]:
-    step_header_regex = re.compile(r'^(\w+):( .+)?$')
-    step_code_regex = re.compile(r'^(\t|\s+)(.+)')
+    step_header_regex = re.compile(r'^([a-zA-Z0-9_\-\.]+):( .+)?$')
+    step_code_regex = re.compile(r'^(\s+)(.+)')
     steps: list[MakeStep] = []
     current_step: MakeStep | None = None
     for i, line in enumerate(lines):
         if match := step_header_regex.match(line):
+            if line.startswith('.'):
+                continue
             dependencies = (match.group(2) or '').strip()
             current_step = MakeStep(
                 name=match.group(1),
