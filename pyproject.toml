@@ -1,6 +1,6 @@
 [project]
 name = "makit"
-version = "0.2.1"  # also in makeit/version.py
+version = "0.2.2"  # also in makeit/version.py
 description = "Interactive Makefile step picker"
 license = {text = "MIT"}
 authors = [

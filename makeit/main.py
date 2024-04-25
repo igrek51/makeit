@@ -9,7 +9,7 @@ def main():
         steps: list[MakeStep] = read_make_steps()
 
         app = ListViewExample(steps)
-        app.run(inline=True, inline_no_clear=True, mouse=False, size=None)
+        app.run(inline=True, inline_no_clear=True, mouse=False)
 
         for log in app.post_logs:
             logger.debug(log)

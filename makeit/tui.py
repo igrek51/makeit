@@ -1,6 +1,5 @@
 from textual.app import App, ComposeResult
 from textual.widgets import Label, ListItem, ListView
-from textual.containers import Horizontal
 from textual import events
 
 from makeit.make import MakeStep
@@ -15,12 +14,18 @@ class ListViewExample(App):
         self.post_logs: list[str] = []
 
     def compose(self) -> ComposeResult:
-        list_children: list[ListItem] = [ListItem(Label(step.name)) for step in self.steps]
+        self.screen.styles.border = ("hidden", 'white')
+
+        header = Label(' Makefile targets:')
+        header.styles.width = '100%'
+        header.styles.color = 'royalblue'
+
+        list_children: list[ListItem] = [ListItem(Label(' ' + step.name)) for step in self.steps]
         listview = ListView(
             *list_children,
             id="steps-list",
         )
-        listview.styles.height = max(len(self.steps), 3) + 1
+        listview.styles.height = max(len(self.steps), 1) + 1
 
         summary_header = Label("", id="summary-header")
         summary_header.styles.color = 'royalblue'
@@ -31,10 +36,10 @@ class ListViewExample(App):
 
         summary = Label("", id="summary")
 
-        yield Label('Makefile targets:')
+        yield header
         yield listview
         yield summary_comment
-        yield Horizontal(summary_header)
+        yield summary_header
         yield summary
 
     def on_list_view_highlighted(self, event: ListView.Highlighted):
