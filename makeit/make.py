@@ -1,8 +1,10 @@
-import re
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
+import re
+import sys
+import time
 
-from nuclear import logger, shell
+from nuclear import CommandError, logger, shell
 
 
 @dataclass
@@ -51,5 +53,40 @@ def _parse_makefile_lines(lines: list[str]) -> list[MakeStep]:
 
 def run_make_step(step: MakeStep) -> None:
     cmd = f'make {step.name}'
-    logger.info(f"{cmd}")
-    shell(cmd, raw_output=True, print_stdout=True, print_log=False)
+    logger.info(f"Command: {cmd}")
+    start_time = time.time()
+    try:
+        shell(cmd, raw_output=True, print_stdout=True, print_log=False)
+    except CommandError as e:
+        duration = format_duration(time.time() - start_time)
+        logger.exception(e)
+        logger.error('Command exited', cmd=cmd, exit_code=e.return_code, duration=duration)
+        sys.exit(e.return_code)
+    else:
+        duration = format_duration(time.time() - start_time)
+        logger.info('Command done', cmd=cmd, exit_code=0, duration=duration)
+
+
+def format_duration(total_seconds: float) -> str:
+    if total_seconds < 0:
+        return format_duration(-total_seconds)
+    millis = int(total_seconds * 1000) % 1000
+    seconds = int(total_seconds % 60)
+    minutes = int((total_seconds / 60) % 60)
+    hours = int((total_seconds / 60 / 60) % 24)
+    days = int(total_seconds / 60 / 60 / 24)
+
+    parts = []
+    if days > 0:
+        parts.append(f'{days}d')
+    if hours > 0:
+        parts.append(f'{hours}h')
+    if minutes > 0:
+        parts.append(f'{minutes}m')
+    if seconds > 0:
+        parts.append(f'{seconds}s')
+    if millis > 0:
+        parts.append(f'{millis}ms')
+    if not parts:
+        return '0s'
+    return ' '.join(parts)
