@@ -9,10 +9,10 @@ def main():
         steps: list[MakeStep] = read_make_steps()
 
         app = ListViewExample(steps)
-        app.run(inline=True, inline_no_clear=True, mouse=False)
+        app.run(inline=False, mouse=False)
+        chosen_step: MakeStep | None = app.chosen_step
 
         for log in app.post_logs:
             logger.debug(log)
-        chosen_step: MakeStep | None = app.chosen_step
         if chosen_step:
             run_make_step(chosen_step)

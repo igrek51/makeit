@@ -20,7 +20,7 @@ def read_make_steps() -> list[MakeStep]:
     makefile_path = Path('Makefile')
     assert makefile_path.is_file(), "'Makefile' not found"
     lines: list[str] = makefile_path.read_text(encoding='utf-8').splitlines()
-    lines = [l for l in lines if l]
+    lines = [line for line in lines if line]
     return _parse_makefile_lines(lines)
 
 
@@ -59,8 +59,7 @@ def run_make_step(step: MakeStep) -> None:
         shell(cmd, raw_output=True, print_stdout=True, print_log=False)
     except CommandError as e:
         duration = format_duration(time.time() - start_time)
-        logger.exception(e)
-        logger.error('Command exited', cmd=cmd, exit_code=e.return_code, duration=duration)
+        logger.error('Command failed', cmd=cmd, exit_code=e.return_code, duration=duration)
         sys.exit(e.return_code)
     else:
         duration = format_duration(time.time() - start_time)

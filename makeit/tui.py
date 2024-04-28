@@ -16,7 +16,7 @@ class ListViewExample(App):
     def compose(self) -> ComposeResult:
         self.screen.styles.border = ("hidden", 'white')
 
-        header = Label(' Makefile targets:')
+        header = Label(f' {len(self.steps)} Makefile targets:')
         header.styles.width = '100%'
         header.styles.color = 'royalblue'
 
@@ -26,6 +26,7 @@ class ListViewExample(App):
             id="steps-list",
         )
         listview.styles.height = max(len(self.steps), 1) + 1
+        listview.styles.max_height = "50vh"
 
         summary_header = Label("", id="summary-header")
         summary_header.styles.color = 'royalblue'
@@ -62,19 +63,19 @@ class ListViewExample(App):
         self.exit()
     
     def _get_selected_step(self) -> MakeStep | None:
-        listview: ListView = self.query_one("#steps-list", ListView)
-        selected_index: int = listview.index or 0
+        selected_index: int = self._get_listview().index or 0
         if selected_index < 0 or selected_index >= len(self.steps):
             return None
         return self.steps[selected_index]
+
+    def _get_listview(self) -> ListView:
+        return self.query_one("#steps-list", ListView)
 
     def on_key(self, event: events.Key) -> None:
         # self.post_logs.append(str(event))
         if event.key in {'q', 'escape'}:
             self.exit()
         elif event.key == 'home':
-            listview: ListView = self.query_one("#steps-list", ListView)
-            listview.index = 0
+            self._get_listview().index = 0
         elif event.key == 'end':
-            listview: ListView = self.query_one("#steps-list", ListView)
-            listview.index = len(self.steps) - 1
+            self._get_listview().index = len(self.steps) - 1

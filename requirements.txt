@@ -1,2 +1,2 @@
 nuclear>=2.1.0
-textual==0.57.1
+textual>=0.58.0
