@@ -89,3 +89,12 @@ def format_duration(total_seconds: float) -> str:
     if not parts:
         return '0s'
     return ' '.join(parts)
+
+
+def render_steps_list(steps: list[MakeStep], chosen_step: MakeStep | None):
+    logger.info(f'{len(steps)} Makefile targets:')
+    for step in steps:
+        if step == chosen_step:
+            print(f'> {step.name}')
+        else:
+            print(f'  {step.name}')
