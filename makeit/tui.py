@@ -71,6 +71,11 @@ class ListViewExample(App):
     def _get_listview(self) -> ListView:
         return self.query_one("#steps-list", ListView)
 
+    def _move_cursor_wrapping(self, delta: int):
+        index = self._get_listview().index
+        if index is not None:
+            self._get_listview().index = (index + delta + len(self.steps)) % len(self.steps)
+
     def on_key(self, event: events.Key) -> None:
         # self.post_logs.append(str(event))
         if event.key in {'q', 'escape'}:
@@ -79,3 +84,7 @@ class ListViewExample(App):
             self._get_listview().index = 0
         elif event.key == 'end':
             self._get_listview().index = len(self.steps) - 1
+        elif event.key == 'j':  # move down, wrapping around
+            self._move_cursor_wrapping(1)
+        elif event.key == 'k':  # move up
+            self._move_cursor_wrapping(-1)
