@@ -61,6 +61,9 @@ def run_make_step(step: MakeStep) -> None:
         duration = format_duration(time.time() - start_time)
         logger.error('Command failed', cmd=cmd, exit_code=e.return_code, duration=duration)
         sys.exit(e.return_code)
+    except KeyboardInterrupt:
+        duration = format_duration(time.time() - start_time)
+        logger.info('Interrupted', cmd=cmd, duration=duration)
     else:
         duration = format_duration(time.time() - start_time)
         logger.info('Command done', cmd=cmd, exit_code=0, duration=duration)
