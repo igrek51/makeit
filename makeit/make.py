@@ -25,7 +25,7 @@ def read_make_steps() -> list[MakeStep]:
 
 
 def _parse_makefile_lines(lines: list[str]) -> list[MakeStep]:
-    step_header_regex = re.compile(r'^([a-zA-Z0-9_\-\.]+):( .+)?$')
+    step_header_regex = re.compile(r'^([a-zA-Z0-9_\-\.]+):\s*(.+?)?$')
     step_code_regex = re.compile(r'^(\s+)(.+)')
     steps: list[MakeStep] = []
     current_step: MakeStep | None = None
