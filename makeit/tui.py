@@ -1,5 +1,5 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Label, ListItem, ListView
+from textual.widgets import Label, ListItem, ListView, Static
 from textual import events
 
 from makeit.make import MakeStep
@@ -32,10 +32,10 @@ class ListViewExample(App):
         summary_header.styles.color = 'royalblue'
         summary_header.styles.text_style = 'bold'
 
-        summary_comment = Label("", id="summary-comment")
+        summary_comment = Static("", id="summary-comment")
         summary_comment.styles.color = 'lightslategray'
 
-        summary = Label("", id="summary")
+        summary = Static("", id="summary")
 
         yield header
         yield listview
@@ -47,7 +47,7 @@ class ListViewExample(App):
         self.selected_step = self._get_selected_step()
         if self.selected_step and self.selected_step.raw_lines:
 
-            comment_label = self.query_one("#summary-comment", Label)
+            comment_label = self.query_one("#summary-comment", Static)
             comment_label.update(self.selected_step.comment or '')
             comment_label.display = bool(self.selected_step.comment)
 
@@ -56,7 +56,7 @@ class ListViewExample(App):
             
             summary = '\n'.join(self.selected_step.raw_lines[1:])
             summary = summary.replace('\t', '    ')
-            self.query_one("#summary", Label).update(summary)
+            self.query_one("#summary", Static).update(summary)
 
     def on_list_view_selected(self, event: ListView.Selected):
         self.chosen_step = self._get_selected_step()
