@@ -27,3 +27,6 @@ release: clean build
 
 testit:
 	sleep 5
+
+version:
+	@cat makeit/version.py
